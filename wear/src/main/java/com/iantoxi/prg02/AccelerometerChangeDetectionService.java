@@ -1,5 +1,6 @@
 package com.iantoxi.prg02;
 
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -49,19 +50,32 @@ public class AccelerometerChangeDetectionService extends Service implements Sens
 
     private void notifyExcitement() {
         int notificationId = 001;
-        // Build intent for notification content
+
+        //Intent for notification view
         Intent viewIntent = new Intent(this, MainActivity.class);
-        viewIntent.putExtra("metadataForIntent", 1);
+//        viewIntent.putExtra("metadataForIntent", 1);
         PendingIntent viewPendingIntent =
                 PendingIntent.getActivity(this, 0, viewIntent, 0);
+
 
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.candy)
-                        .setContentTitle(String.valueOf(System.currentTimeMillis() % 100000))
                         .setContentText(getString(R.string.excited_text))
-                        .setContentIntent(viewPendingIntent);
-        //.setContentTitle(getString(R.string.excited_title))
+                        .setContentIntent(viewPendingIntent)
+                        .setContentTitle(getString(R.string.excited_title));
+        //Intent to open handheld camera
+        Intent cameraIntent = new Intent(getApplicationContext(),
+                SendExcitementToHandheldIntentService.class);
+        PendingIntent cameraPendingIntent = PendingIntent.getService(getApplicationContext(),
+                0, cameraIntent, 0);
+
+        NotificationCompat.Action cameraAction = new NotificationCompat.Action.Builder(
+                R.drawable.common_signin_btn_icon_dark,
+                getString(R.string.common_open_on_phone),
+                cameraPendingIntent).extend(new NotificationCompat.Action.WearableExtender()
+                    .setAvailableOffline(false)).build();
+        notificationBuilder.addAction(cameraAction);
 
         // Get an instance of the NotificationManager service
         NotificationManagerCompat notificationManager =

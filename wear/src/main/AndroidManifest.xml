@@ -24,6 +24,10 @@
             android:enabled="true"
             android:exported="true" >
         </service>
+        <service
+            android:name=".SendExcitementToHandheldIntentService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>
