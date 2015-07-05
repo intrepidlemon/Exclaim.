@@ -3,5 +3,6 @@
     <string name="hello_round">Hello Round World!</string>
     <string name="excited_title">Whoa!</string>
     <string name="excited_text">Document this incredible moment!</string>
+    <string name="take_picture">Take a pic!</string>
     <string name="hello_square">Hello Square World!</string>
 </resources>

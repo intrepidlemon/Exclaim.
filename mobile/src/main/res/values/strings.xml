@@ -2,5 +2,7 @@
     <string name="app_name">PRG02</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="camera">I am a camera. Just pretend.</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_camera">CameraActivity</string>
 </resources>
