@@ -1,0 +1,11 @@
+- [] simple notifications from phone to watch
+- [] watch acceleromator sensor values
+
+#app
+- [] first thing when opened is requires credentials for twitter. 
+- [] App runs in background. 
+- [] Application on watch listens for changes in acceleromater
+- [] Notification when high acceleration detected. 
+- [] Notification has Action which takes pic. 
+- [] Phone takes picture. Tweets #cs160 with picture
+- [] Fetch tweet by someone else with same hashtag 
