@@ -7,6 +7,7 @@ import android.os.IBinder;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
 
+
 public class ExcitementListenerService extends WearableListenerService {
     private static final String TRIGGER_EXCITEMENT_CAMERA = "excitement_camera";
 
@@ -18,4 +19,6 @@ public class ExcitementListenerService extends WearableListenerService {
             startActivity(startIntent);
         }
     }
+
+
 }

@@ -35,9 +35,7 @@ public class CameraActivity extends Activity {
         setContentView(R.layout.activity_camera);
 
         session = Twitter.getSessionManager().getActiveSession();
-
         Fabric.with(this, new TweetComposer());
-
 
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -70,8 +68,8 @@ public class CameraActivity extends Activity {
                 // Image capture failed, advise user
             }
         } else if(requestCode == TWEET_COMPOSER_REQUEST_CODE) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            Intent intent = new Intent(this, TweetNotificationService.class);
+            startService(intent);
         }
     }
 

@@ -30,6 +30,7 @@ public class SendExcitementToHandheldIntentService extends IntentService {
 
     private GoogleApiClient mGoogleApiClient;
     private List<Node> nodes = null;
+    private Node node = null;
 
     public SendExcitementToHandheldIntentService() {
         super("SendExcitementToHandheldIntentService");
@@ -44,16 +45,14 @@ public class SendExcitementToHandheldIntentService extends IntentService {
     }
 
     private void initiateExcitementCamera() {
-        if (nodes != null) {
-            for (Node node: nodes) {
-                Wearable.MessageApi.sendMessage(mGoogleApiClient, node.getId(),
-                        TRIGGER_EXCITEMENT_CAMERA, null).await();
-            }
+        if (node != null) {
+            Wearable.MessageApi.sendMessage(mGoogleApiClient, node.getId(),
+                    TRIGGER_EXCITEMENT_CAMERA, null).await();
         }
     }
 
     private void showOpenOnPhoneAnimation() {
-        if (nodes != null) {
+        if (node != null) {
             Intent openOnPhoneIntent = new Intent(this, ConfirmationActivity.class);
             openOnPhoneIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             openOnPhoneIntent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE,
@@ -68,10 +67,18 @@ public class SendExcitementToHandheldIntentService extends IntentService {
                 .build();
         ConnectionResult connectionResult =
                 mGoogleApiClient.blockingConnect(30, TimeUnit.SECONDS);
+
         if (!connectionResult.isSuccess()) {
             Log.e("Send Excitement:", "Failed to connect to GoogleApiClient.");
             return;
         }
+
+        CapabilityApi.GetCapabilityResult capResult =
+                Wearable.CapabilityApi.getCapability(mGoogleApiClient,
+                        TRIGGER_EXCITEMENT_CAMERA,
+                        CapabilityApi.FILTER_REACHABLE).await();
+
+        node = capResult.getCapability().getNodes().iterator().next();
 
         nodes = Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await().getNodes();
     }
