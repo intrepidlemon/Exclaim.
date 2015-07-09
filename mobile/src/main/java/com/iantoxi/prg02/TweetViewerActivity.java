@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.LinearLayout;
 
 import com.twitter.sdk.android.core.models.Tweet;
@@ -21,15 +22,20 @@ public class TweetViewerActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_tweet_viewer);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = getIntent();
         final LinearLayout myLayout
                 = (LinearLayout) findViewById(R.id.tweet_viewer);
 
-
-        Intent intent = getIntent();
-
-        final long tweetId = intent.getExtras().getLong(TWEET_ID);;
+        final long tweetId = intent.getExtras().getLong(TWEET_ID);
         TweetUtils.loadTweet(tweetId, new LoadCallback<Tweet>() {
             @Override
             public void success(Tweet tweet) {
@@ -43,7 +49,6 @@ public class TweetViewerActivity extends Activity {
             }
         });
     }
-
 
 
     @Override
@@ -66,5 +71,11 @@ public class TweetViewerActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 }

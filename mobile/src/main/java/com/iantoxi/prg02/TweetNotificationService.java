@@ -33,6 +33,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import io.fabric.sdk.android.Fabric;
+
 public class TweetNotificationService extends Service {
     private String SEARCH_QUERY;
     private final int SEARCH_COUNT = 1;
@@ -51,6 +53,7 @@ public class TweetNotificationService extends Service {
     }
 
     private void getTweet() {
+
         TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
         SearchService service = twitterApiClient.getSearchService();
 
@@ -99,7 +102,7 @@ public class TweetNotificationService extends Service {
 
                 }
         );
-
+        this.stopSelf();
     }
 
     private void notifyWithTweet(Bitmap image, String tweet, long tweetID) {
@@ -111,6 +114,11 @@ public class TweetNotificationService extends Service {
         PendingIntent viewPendingIntent =
                 PendingIntent.getActivity(this, 0, viewIntent, 0);
 
+        NotificationCompat.WearableExtender wearableExtender =
+                new NotificationCompat.WearableExtender()
+                        .setHintHideIcon(true)
+                        .setBackground(image);
+
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.candy)
@@ -118,6 +126,7 @@ public class TweetNotificationService extends Service {
                         .setContentTitle(getString(R.string.tweet_title))
                         .setContentText(tweet)
                         .setContentIntent(viewPendingIntent)
+                        .extend(wearableExtender)
                         .setStyle(new NotificationCompat.BigPictureStyle()
                                 .bigPicture(image));
 

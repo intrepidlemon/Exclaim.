@@ -7,7 +7,4 @@
     tools:context="com.iantoxi.prg02.TweetViewerActivity"
     android:id="@+id/tweet_viewer">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
 </LinearLayout>

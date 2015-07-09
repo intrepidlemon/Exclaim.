@@ -62,8 +62,7 @@ public class AccelerometerChangeDetectionService extends Service implements Sens
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.candy)
                         .setContentText(getString(R.string.excited_text))
-                        .setContentIntent(viewPendingIntent)
-                        .setContentTitle(getString(R.string.excited_title));
+                        .setContentIntent(viewPendingIntent);
 
         //Intent to open handheld camera
         Intent cameraIntent = new Intent(getApplicationContext(),

@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import io.fabric.sdk.android.Fabric;
 import com.twitter.sdk.android.Twitter;
@@ -29,32 +32,58 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
+
         setContentView(R.layout.activity_main);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        hideSignedInDisplay();
 
         loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
-                loginButton.setVisibility(View.GONE);
-
-                // Do something with result, which provides a TwitterSession for making API calls
             }
 
             @Override
             public void failure(TwitterException exception) {
-                // Do something on failure
             }
         });
 
+        signedInDisplayChange();
+
+    }
+
+    private void hideSignedInDisplay() {
+        TextView signedIn = (TextView) findViewById(R.id.signed_in);
+        signedIn.setVisibility(View.GONE);
+        Button excitedButton = (Button) findViewById(R.id.excited_button);
+        excitedButton.setVisibility(View.GONE);
+    }
+
+    private void signedInDisplayChange() {
         session = Twitter.getSessionManager().getActiveSession();
         if (session != null) {
             loginButton.setVisibility(View.GONE);
             TextView signedIn = (TextView) findViewById(R.id.signed_in);
+            signedIn.setVisibility(View.VISIBLE);
+            Button excitedButton = (Button) findViewById(R.id.excited_button);
+            excitedButton.setVisibility(View.VISIBLE);
             signedIn.setText("You are signed in as " + session.getUserName());
         }
+    }
+
+    public void excitedClick(View view) {
+        Intent startIntent = new Intent(this, CameraActivity.class);
+        startActivity(startIntent);
     }
 
     @Override
@@ -69,6 +98,7 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

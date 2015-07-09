@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.twitter.sdk.android.Twitter;
@@ -27,35 +28,21 @@ public class CameraActivity extends Activity {
     private static final int TWEET_COMPOSER_REQUEST_CODE = 110;
 
     private Uri fileUri;
-    private TwitterSession session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_camera);
-
-        session = Twitter.getSessionManager().getActiveSession();
-        Fabric.with(this, new TweetComposer());
-
-        // create Intent to take a picture and return control to the calling application
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-
-        // start the image capture Intent
-        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-
+        startCamera();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                // Image captured and saved to fileUri specified in the Intent
-                Toast.makeText(this, "Image saved to:\n" +
-                        fileUri.toString(), Toast.LENGTH_LONG).show();
 
+                // Image captured and saved to fileUri specified in the Intent
                 Intent intent = new TweetComposer.Builder(this)
                         .text(getString(R.string.automatic_tweet))
                         .image(fileUri)
@@ -63,14 +50,27 @@ public class CameraActivity extends Activity {
 
                 startActivityForResult(intent, TWEET_COMPOSER_REQUEST_CODE);
             } else if (resultCode == RESULT_CANCELED) {
-                // User cancelled the image capture
+                finish();
             } else {
-                // Image capture failed, advise user
+                Toast.makeText(this, "Image capture failed :(", Toast.LENGTH_LONG).show();
+                startCamera();
             }
         } else if(requestCode == TWEET_COMPOSER_REQUEST_CODE) {
             Intent intent = new Intent(this, TweetNotificationService.class);
             startService(intent);
+            finish();
         }
+    }
+
+    private void startCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        //TODO save file to internal application files
+        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+
+        // start the image capture Intent
+        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
     @Override

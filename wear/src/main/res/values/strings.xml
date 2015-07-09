@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">PRG02</string>
+    <string name="app_name">Exclaim.</string>
     <string name="hello_round">Hello Round World!</string>
-    <string name="excited_title">Whoa!</string>
-    <string name="excited_text">Document this incredible moment!</string>
-    <string name="take_picture">Take a pic!</string>
+    <string name="excited_title">Exclaim.</string>
+    <string name="excited_text">Exclaim your excitement!</string>
+    <string name="take_picture">Capture</string>
     <string name="hello_square">Hello Square World!</string>
+    <string name="excited_button">I\'m excited!</string>
 </resources>
