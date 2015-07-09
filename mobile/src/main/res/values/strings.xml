@@ -8,6 +8,6 @@
     <string name="camera">I am a camera. Just pretend.</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_camera">CameraActivity</string>
-    <string name="excited_button">I\'m excited!</string>
+    <string name="excited_button"><u>I\'m excited!</u></string>
     <string name="title_activity_tweet_viewer">TweetViewerActivity</string>
 </resources>

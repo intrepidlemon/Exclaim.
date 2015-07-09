@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -16,7 +17,7 @@ import android.support.v4.app.NotificationManagerCompat;
 public class AccelerometerChangeDetectionService extends Service implements SensorEventListener{
     private SensorManager excitementSensorManager;
     private Sensor excitementSensor;
-    private long lastNotificationTime = 0;
+    private long lastNotificationTime;
 
     public AccelerometerChangeDetectionService() {
     }
@@ -27,6 +28,8 @@ public class AccelerometerChangeDetectionService extends Service implements Sens
         excitementSensor = excitementSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         excitementSensorManager.registerListener(this, excitementSensor,
                 SensorManager.SENSOR_DELAY_NORMAL);
+
+        lastNotificationTime = 0;
         return START_STICKY;
     }
 
@@ -42,7 +45,7 @@ public class AccelerometerChangeDetectionService extends Service implements Sens
         y = Math.abs(event.values[1]);
         z = Math.abs(event.values[2]);
 
-        if (x + y + z > 50 && System.currentTimeMillis() - lastNotificationTime > 300000) {
+        if (x + y + z > 50 && System.currentTimeMillis() - lastNotificationTime > 30000) {
             lastNotificationTime = System.currentTimeMillis();
             notifyExcitement();
         }
@@ -60,7 +63,9 @@ public class AccelerometerChangeDetectionService extends Service implements Sens
 
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.candy)
+                        .setSmallIcon(R.drawable.logo)
+                        .setLargeIcon(BitmapFactory.decodeResource(
+                                getResources(), R.drawable.notificationbg))
                         .setContentText(getString(R.string.excited_text))
                         .setContentIntent(viewPendingIntent);
 
@@ -71,7 +76,7 @@ public class AccelerometerChangeDetectionService extends Service implements Sens
                 0, cameraIntent, 0);
 
         NotificationCompat.Action cameraAction = new NotificationCompat.Action.Builder(
-                R.drawable.common_signin_btn_icon_dark,
+                R.drawable.camera,
                 getString(R.string.take_picture),
                 cameraPendingIntent).extend(new NotificationCompat.Action.WearableExtender()
                     .setAvailableOffline(false)).build();

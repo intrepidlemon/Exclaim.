@@ -2,8 +2,8 @@
     <string name="app_name">Exclaim.</string>
     <string name="hello_round">Hello Round World!</string>
     <string name="excited_title">Exclaim.</string>
-    <string name="excited_text">Exclaim your excitement!</string>
-    <string name="take_picture">Capture</string>
+    <string name="excited_text">You seem excited...</string>
+    <string name="take_picture">Capture why.</string>
     <string name="hello_square">Hello Square World!</string>
-    <string name="excited_button">I\'m excited!</string>
+    <string name="excited_button"><u>I\'m excited!</u></string>
 </resources>
