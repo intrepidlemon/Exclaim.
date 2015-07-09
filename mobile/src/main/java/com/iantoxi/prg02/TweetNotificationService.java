@@ -61,7 +61,7 @@ public class TweetNotificationService extends Service {
                 null, true, new Callback<Search>() {
                     @Override
                     public void success(Result<Search> searchResult) {
-                        final List<Tweet> tweets = searchResult.data.tweets;
+                        List<Tweet> tweets = searchResult.data.tweets;
                         String tweetImageUrl = tweets.get(0).entities.media.get(0).mediaUrl;
                         String tweetText = tweets.get(0).text;
                         long tweetId = tweets.get(0).id;
@@ -111,8 +111,10 @@ public class TweetNotificationService extends Service {
         // Build intent for notification content
         Intent viewIntent = new Intent(this, TweetViewerActivity.class);
         viewIntent.putExtra(TWEET_ID, tweetID);
+        viewIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         PendingIntent viewPendingIntent =
-                PendingIntent.getActivity(this, 0, viewIntent, 0);
+                PendingIntent.getActivity(this, 0, viewIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.WearableExtender wearableExtender =
                 new NotificationCompat.WearableExtender()
@@ -121,7 +123,7 @@ public class TweetNotificationService extends Service {
 
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.candy)
+                        .setSmallIcon(R.drawable.logo)
                         .setLargeIcon(image)
                         .setContentTitle(getString(R.string.tweet_title))
                         .setContentText(tweet)

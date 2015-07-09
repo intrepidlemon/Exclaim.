@@ -9,28 +9,34 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.LinearLayout;
 
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.tweetui.LoadCallback;
+import com.twitter.sdk.android.tweetui.TweetUi;
 import com.twitter.sdk.android.tweetui.TweetUtils;
 import com.twitter.sdk.android.tweetui.TweetView;
+
+import io.fabric.sdk.android.Fabric;
 
 
 public class TweetViewerActivity extends Activity {
     private final String TWEET_ID = "tweetID";
+    private static final String TWITTER_KEY = "c6k3wpsws3D3AzXSiCKLidO8Y";
+    private static final String TWITTER_SECRET = "v4mdHAMunvjP1x0CWyri5wgGWJ9SdlbCSUp5nB4Lb7rObrXT5P";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+        TwitterAuthConfig authConfig =  new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         setContentView(R.layout.activity_tweet_viewer);
-
+        updateTweet();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    private void updateTweet() {
         Intent intent = getIntent();
         final LinearLayout myLayout
                 = (LinearLayout) findViewById(R.id.tweet_viewer);
@@ -50,6 +56,12 @@ public class TweetViewerActivity extends Activity {
         });
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        this.setIntent(intent);
+        updateTweet();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
