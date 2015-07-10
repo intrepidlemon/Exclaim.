@@ -1,7 +1,11 @@
 package com.iantoxi.prg02;
 
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.wearable.activity.ConfirmationActivity;
 import android.util.Log;
 
@@ -80,8 +84,25 @@ public class SendExcitementToHandheldIntentService extends IntentService {
 
         if(capResult.getCapability().getNodes().size() > 0) {
             node = capResult.getCapability().getNodes().iterator().next();
+        } else {
+            notifyFail();
         }
+    }
 
+    private void notifyFail() {
+        int notificationId = 001;
+
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.logo)
+                        .setContentTitle(getString(R.string.disconnected_title));
+
+        // Get an instance of the NotificationManager service
+        NotificationManagerCompat notificationManager =
+                NotificationManagerCompat.from(this);
+
+        // Build the notification and issues it with notification manager.
+        notificationManager.notify(notificationId, notificationBuilder.build());
     }
 
 }

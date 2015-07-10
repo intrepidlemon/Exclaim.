@@ -6,4 +6,5 @@
     <string name="take_picture">Capture why.</string>
     <string name="hello_square">Hello Square World!</string>
     <string name="excited_button"><u>I\'m excited!</u></string>
+    <string name="disconnected_title">No phone connected</string>
 </resources>
