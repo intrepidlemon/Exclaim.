@@ -2,12 +2,14 @@ package com.iantoxi.prg02;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +47,7 @@ public class MainActivity extends Activity {
     protected void onStart() {
         super.onStart();
 
+        startBackground();
         hideSignedInDisplay();
 
         loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
@@ -60,6 +63,12 @@ public class MainActivity extends Activity {
 
         signedInDisplayChange();
 
+    }
+
+    private void startBackground() {
+        ImageView background = (ImageView) findViewById(R.id.background);
+        AnimationDrawable progressAnimation = (AnimationDrawable) background.getDrawable();
+        progressAnimation.start();
     }
 
     private void hideSignedInDisplay() {

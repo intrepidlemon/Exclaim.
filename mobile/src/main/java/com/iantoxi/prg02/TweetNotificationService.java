@@ -37,7 +37,7 @@ import io.fabric.sdk.android.Fabric;
 
 public class TweetNotificationService extends Service {
     private String SEARCH_QUERY;
-    private final int SEARCH_COUNT = 1;
+    private final int SEARCH_COUNT = 20;
     private final String SEARCH_RESULT_TYPE = "mixed";
     private final String TWEET_ID = "tweetID";
 
@@ -57,18 +57,27 @@ public class TweetNotificationService extends Service {
         TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
         SearchService service = twitterApiClient.getSearchService();
 
+
         service.tweets(SEARCH_QUERY, null, null, null, SEARCH_RESULT_TYPE, SEARCH_COUNT, null, null,
                 null, true, new Callback<Search>() {
                     @Override
                     public void success(Result<Search> searchResult) {
+                        TwitterSession session = Twitter.getSessionManager().getActiveSession();
+
                         List<Tweet> tweets = searchResult.data.tweets;
-                        String tweetImageUrl = tweets.get(0).entities.media.get(0).mediaUrl;
-                        String tweetText = tweets.get(0).text;
-                        long tweetId = tweets.get(0).id;
 
-                        Bitmap tweetImage = getBitmapFromURL(tweetImageUrl);
+                        for (Tweet tweet : tweets) {
+                            if (tweet.user.id != session.getUserId()) {
+                                String tweetImageUrl = tweet.entities.media.get(0).mediaUrl;
+                                String tweetText = tweet.text;
+                                long tweetId = tweet.id;
 
-                        notifyWithTweet(tweetImage, tweetText, tweetId);
+                                Bitmap tweetImage = getBitmapFromURL(tweetImageUrl);
+
+                                notifyWithTweet(tweetImage, tweetText, tweetId);
+                                break;
+                            }
+                        }
                     }
 
                     @Override

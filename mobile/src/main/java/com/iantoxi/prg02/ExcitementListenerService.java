@@ -6,6 +6,8 @@ import android.os.IBinder;
 
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterSession;
 
 
 public class ExcitementListenerService extends WearableListenerService {
@@ -13,10 +15,20 @@ public class ExcitementListenerService extends WearableListenerService {
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
+
         if (messageEvent.getPath().equals(TRIGGER_EXCITEMENT_CAMERA)) {
-            Intent startIntent = new Intent(getApplicationContext(), CameraActivity.class);
-            startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(startIntent);
+
+            TwitterSession session = Twitter.getSessionManager().getActiveSession();
+
+            if (session != null) {
+                Intent startIntent = new Intent(getApplicationContext(), CameraActivity.class);
+                startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(startIntent);
+            } else {
+                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(startIntent);
+            }
         }
     }
 

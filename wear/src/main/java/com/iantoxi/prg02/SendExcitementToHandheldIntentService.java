@@ -78,9 +78,10 @@ public class SendExcitementToHandheldIntentService extends IntentService {
                         TRIGGER_EXCITEMENT_CAMERA,
                         CapabilityApi.FILTER_REACHABLE).await();
 
-        node = capResult.getCapability().getNodes().iterator().next();
+        if(capResult.getCapability().getNodes().size() > 0) {
+            node = capResult.getCapability().getNodes().iterator().next();
+        }
 
-        nodes = Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await().getNodes();
     }
 
 }
