@@ -23,13 +23,15 @@ import io.fabric.sdk.android.Fabric;
 
 public class TweetViewerActivity extends Activity {
     private final String TWEET_ID = "tweetID";
-    private static final String TWITTER_KEY = "c6k3wpsws3D3AzXSiCKLidO8Y";
-    private static final String TWITTER_SECRET = "v4mdHAMunvjP1x0CWyri5wgGWJ9SdlbCSUp5nB4Lb7rObrXT5P";
+    private String TWITTER_KEY;
+    private String TWITTER_SECRET;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        TWITTER_KEY = getString(R.string.twitter_key);
+        TWITTER_SECRET = getString(R.string.twitter_secret);
         TwitterAuthConfig authConfig =  new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new TwitterCore(authConfig), new TweetUi());
         setContentView(R.layout.activity_tweet_viewer);
