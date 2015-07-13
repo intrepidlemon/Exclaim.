@@ -2,7 +2,7 @@
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
-.DS_Store
 /build
-secrets.xml
+.DS_Store
+mobile/src/main/res/values-v21/secrets.xml
 /captures
